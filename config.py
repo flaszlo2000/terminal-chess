@@ -1,22 +1,23 @@
 from dataclasses import dataclass, field
 from table.piece_enum import PieceEnum
-from typing import Dict
+from typing import Dict, Final
 
 
-def _get_default_piece_representations() -> Dict[PieceEnum, str]:
-    return {
-        PieceEnum.PAWN: "P",
-        PieceEnum.ROOK: "R",
-        PieceEnum.KNIGHT: "N",
-        PieceEnum.BISHOP: "B",
-        PieceEnum.QUEEN: "Q",
-        PieceEnum.KING: "K"
-    }
+PIECE_DEFAULT_REPRESENTATION: Final[Dict[PieceEnum, str]] = {
+    PieceEnum.PAWN: "P",
+    PieceEnum.ROOK: "R",
+    PieceEnum.KNIGHT: "N",
+    PieceEnum.BISHOP: "B",
+    PieceEnum.QUEEN: "Q",
+    PieceEnum.KING: "K",
+
+    PieceEnum.EMPTY: " "
+}
 
 @dataclass
 class Representations:
-    white: Dict[PieceEnum, str] = field(default_factory = _get_default_piece_representations)
-    black: Dict[PieceEnum, str] = field(default_factory = _get_default_piece_representations)
+    white: Dict[PieceEnum, str] = field(default_factory = PIECE_DEFAULT_REPRESENTATION.copy)
+    black: Dict[PieceEnum, str] = field(default_factory = PIECE_DEFAULT_REPRESENTATION.copy)
 
 @dataclass
 class Config:

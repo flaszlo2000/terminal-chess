@@ -8,3 +8,5 @@ class PieceEnum(Enum):
     BISHOP = auto()
     QUEEN = auto()
     KING = auto()
+    
+    EMPTY = auto()

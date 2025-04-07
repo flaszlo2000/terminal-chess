@@ -19,3 +19,6 @@ class Piece:
 
         if len(self.representation) == 0:
             self.representation = self._get_piece_representation()
+
+    def getType(self) -> PieceEnum:
+        return self._type

@@ -6,8 +6,8 @@ from window_setup import WindowSetup
 from console_drawing.main import draw_table
 from console_drawing.event_handlers import on_resize
 from typing import Dict, Callable, List
-from table.main import crate_table
 from console_drawing.coord import Coord
+from table.table import Table
 
 
 def move_piece_up(window_setup: WindowSetup) -> None:
@@ -35,7 +35,7 @@ def draw_wireframe_board(stdscr: CursesWindow):
     curses.start_color()
     curses.init_pair(1, curses.COLOR_BLACK, 243) #! FIXME: add correct black color
 
-    window_setup = WindowSetup(stdscr, crate_table(), 1)
+    window_setup = WindowSetup(stdscr, Table.create(), 1)
     on_resize(window_setup) # initial resize # TODO: make sure to add option to disable this
 
     draw_table(window_setup)
