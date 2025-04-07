@@ -1,13 +1,20 @@
 from dataclasses import dataclass, field
-from typing import Dict, Self, List, Final
+from typing import Dict, Self, List, Final, Optional
 from table.piece import Piece
 from console_drawing.coord import Coord
-from globals import PIECE_MAP, MINOR_PIECES_IN_ORDER, PAWNS, PAWN_LINES, MINOR_PIECE_LINES, PieceEnum
+from globals import PIECE_MAP, MINOR_PIECES_IN_ORDER, PAWNS, PAWN_LINES, MINOR_PIECE_LINES
 
 
 @dataclass
-class Table:
+class PieceWithCoord:
+    piece: Piece
+    coord: Coord
+
+@dataclass
+class Table: # TODO: SEPARATE THIS
     full_content: Dict[int, Dict[int, Piece]] = field(default_factory = dict)
+    _selected_piece: Optional[PieceWithCoord] = field(default = None)
+
 
     @staticmethod
     def setup_pieces(line: Dict[int, Piece], pieces: str, *, is_white: bool) -> Dict[int, Piece]:
@@ -43,7 +50,33 @@ class Table:
         assert new_coord.x <= 7 and new_coord.y <= 7
 
         piece: Piece = self.full_content[old_coord.y].pop(old_coord.x)
-        assert piece.getType() is not PieceEnum.EMPTY
+        assert piece.hasValue()
 
         self.full_content[old_coord.y][old_coord.x] = self.full_content[new_coord.y][new_coord.x]
         self.full_content[new_coord.y][new_coord.x] = piece
+
+    def getPiece(self, coord: Coord) -> Piece:
+        return self.full_content[coord.y][coord.x]
+
+    def hasSelectedPiece(self) -> bool:
+        return self._selected_piece is not None
+
+    def removeSelectedPiece(self) -> None:
+        assert self._selected_piece is not None
+
+        self._selected_piece.piece.special_color = None
+        self._selected_piece = None
+
+    def selectPieceAt(self, coord: Coord) -> None:
+        piece_to_select = self.getPiece(coord)
+        assert piece_to_select.hasValue()
+
+        if self.hasSelectedPiece(): self.removeSelectedPiece()
+
+        piece_to_select.special_color = 2 # red # TODO: refactor this
+        self._selected_piece = PieceWithCoord(piece_to_select, coord)
+
+    def getSelectedPieceCoord(self) -> Coord:
+        assert self._selected_piece is not None
+
+        return self._selected_piece.coord

@@ -3,6 +3,8 @@ from console_drawing.board_helpers import get_board_height, get_board_width
 from globals import ALLOWED_SQUARE_HEIGHTS
 from console_drawing.main import draw_table
 from typing import Tuple
+from curses import getmouse as curses_getmouse
+from console_drawing.coord import Coord
 
 
 def _update(window_setup: WindowSetup) -> None:
@@ -44,3 +46,36 @@ def on_resize(window_setup: WindowSetup) -> None: # TODO: make sure to add optio
 
         if biggest_applicable_board_size > current_board_size:
             _make_table_bigger(window_setup, biggest_applicable_board_size)
+
+def on_mouse_click(window_setup: WindowSetup) -> None:
+    _, mx, my, _, _ = curses_getmouse()
+
+    # TODO: comments
+    click_coord = Coord(
+        mx // (window_setup.square_height * 2 + 2), 
+        my // (window_setup.square_height + 1)
+    )
+
+    if click_coord.x > 7 or click_coord.y > 7:
+        # TODO
+        return
+    
+    piece_to_select = window_setup.table.getPiece(click_coord)
+    has_selected_piece = window_setup.table.hasSelectedPiece()
+    if not piece_to_select.hasValue() and not has_selected_piece: return
+
+    if not has_selected_piece:
+        window_setup.table.selectPieceAt(click_coord)
+    else: # move or remove selection
+        # TODO: add constraints
+        selected_piece_coord = window_setup.table.getSelectedPieceCoord()
+        
+        if selected_piece_coord == click_coord:
+            window_setup.table.removeSelectedPiece()
+            draw_table(window_setup)
+            return
+        
+        window_setup.table.move_piece(selected_piece_coord, click_coord)
+        window_setup.table.removeSelectedPiece()
+
+    draw_table(window_setup)        

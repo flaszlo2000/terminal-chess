@@ -49,4 +49,9 @@ def draw_table(window_setup: WindowSetup) -> None:
 
     for y, line in window_setup.table.full_content.items():
         for x, piece in line.items():
-            generate_chessboard_coord(window_setup, Coord(x, y), piece.representation, not piece.white)
+            color = not piece.white
+
+            if piece.special_color is not None:
+                color = piece.special_color
+ 
+            generate_chessboard_coord(window_setup, Coord(x, y), piece.representation, color)
