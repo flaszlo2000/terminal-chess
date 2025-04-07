@@ -11,11 +11,11 @@ class Piece:
     representation: str = field(default = "")
 
     
-    def get_piece_representation(self) -> str:
+    def _get_piece_representation(self) -> str:
         return CONFIG.representations.white[self._type] if self.white else CONFIG.representations.black[self._type]
 
     def __post_init__(self) -> None:
         assert self._type is not None
 
         if len(self.representation) == 0:
-            self.representation = self.get_piece_representation()
+            self.representation = self._get_piece_representation()

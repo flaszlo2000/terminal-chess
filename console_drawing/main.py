@@ -48,8 +48,8 @@ def generate_chessboard_coord(window_setup: WindowSetup, coord: Coord, content: 
 def draw_table(window_setup: WindowSetup) -> None:
     assert window_setup.table.full_content is not None
 
-    for y, line in enumerate(window_setup.table.full_content.values()):
-        for x, piece in enumerate(line.values()):
+    for y, line in window_setup.table.full_content.items():
+        for x, piece in line.items():
             content = " "
             color = None
 

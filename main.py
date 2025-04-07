@@ -7,11 +7,17 @@ from console_drawing.main import draw_table
 from console_drawing.event_handlers import on_resize
 from typing import Dict, Callable, List
 from table.main import crate_table
+from console_drawing.coord import Coord
 
+
+def move_piece_up(window_setup: WindowSetup) -> None:
+    window_setup.table.move_piece(Coord(1, 7), Coord(2, 5))
+    draw_table(window_setup)
 
 def event_loop(window_setup: WindowSetup) -> None:
     event_callbacks: Dict[int, List[Callable[[WindowSetup], None]]] = {
-        curses.KEY_RESIZE: [on_resize]
+        curses.KEY_RESIZE: [on_resize],
+        curses.KEY_UP: [move_piece_up]
     }
 
     while True:
