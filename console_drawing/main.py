@@ -39,7 +39,6 @@ def generate_chessboard_coord(window_setup: WindowSetup, coord: Coord, content: 
 
     window_setup.window.move(center_y, center_x)
 
-
     if color is None:
         window_setup.window.addch(content)
     else:
@@ -50,11 +49,4 @@ def draw_table(window_setup: WindowSetup) -> None:
 
     for y, line in window_setup.table.full_content.items():
         for x, piece in line.items():
-            content = " "
-            color = None
-
-            if piece is not None:
-                content = piece.representation
-                color = not piece.white
-
-            generate_chessboard_coord(window_setup, Coord(x, y), content, color)
+            generate_chessboard_coord(window_setup, Coord(x, y), piece.representation, not piece.white)

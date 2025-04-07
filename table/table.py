@@ -22,9 +22,10 @@ class Table:
 
     @staticmethod
     def setup_table(empty_table: Dict[int, Dict[int, Piece]]) -> None:
-        Table.setup_lines_for_both_colors(empty_table,  PAWN_LINES, PAWNS)
+        Table.setup_lines_for_both_colors(empty_table, PAWN_LINES, PAWNS)
         Table.setup_lines_for_both_colors(empty_table, MINOR_PIECE_LINES, MINOR_PIECES_IN_ORDER)
 
+        # NOTE: cannot use setup_lines_for_both_colors because first line would be miscolored
         EMPTY_TABLE_LINES: Final[List[int]] = list(range(2, 6))
         EMPTY_LINE: Final[str] = " " * 8
         for empty_line_index in EMPTY_TABLE_LINES:
