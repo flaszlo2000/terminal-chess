@@ -1,11 +1,10 @@
 from window_setup import WindowSetup
 from console_drawing.coord import Coord
-from typing import Optional, List, Final
-from globals import DEFAULT_TABLE
+from typing import Optional, Final
+from curses import color_pair as curses_color_pair
 
 
-# TODO: add color!
-def generate_chessboard_coord(window_setup: WindowSetup, coord: Coord, content: str) -> None:
+def generate_chessboard_coord(window_setup: WindowSetup, coord: Coord, content: str, color: Optional[int] = None) -> None:
     # TODO: add comments!
     assert coord.x >= 0 and coord.y >= 0
     assert len(content) == 1
@@ -39,13 +38,23 @@ def generate_chessboard_coord(window_setup: WindowSetup, coord: Coord, content: 
     center_y = start_y + ((window_setup.square_height ) // 2 + 1)
 
     window_setup.window.move(center_y, center_x)
-    window_setup.window.addch(content)
 
 
-def draw_table(window_setup: WindowSetup, _table: Optional[List[str]] = None) -> None:
-    # TODO: give back table
-    table = _table or DEFAULT_TABLE
+    if color is None:
+        window_setup.window.addch(content)
+    else:
+        window_setup.window.addch(content, curses_color_pair(color))
 
-    for y, line in enumerate(table):
-        for x, piece in enumerate(line):
-            generate_chessboard_coord(window_setup, Coord(x, y), piece)
+def draw_table(window_setup: WindowSetup) -> None:
+    assert window_setup.table.full_content is not None
+
+    for y, line in enumerate(window_setup.table.full_content.values()):
+        for x, piece in enumerate(line.values()):
+            content = " "
+            color = None
+
+            if piece is not None:
+                content = piece.representation
+                color = not piece.white
+
+            generate_chessboard_coord(window_setup, Coord(x, y), content, color)
