@@ -25,7 +25,8 @@ def draw_wireframe_board(stdscr: CursesWindow):
     curses.curs_set(0)
     stdscr.clear()
     
-    window_setup = WindowSetup(stdscr, 3)
+    window_setup = WindowSetup(stdscr, 1)
+    on_resize(window_setup) # initial resize # TODO: make sure to add option to disable this
 
     draw_table(window_setup)
     event_loop(window_setup)
